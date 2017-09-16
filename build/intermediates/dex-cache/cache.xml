@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/5dff37e14a66b84a97e5c993c4e234cb728b0259/output/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="045be695d968dd707691cc55d23746dbf8cf569a">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.0_2ea7993e088dd41c6edc109bef1a3ea11f6e6354.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/503ef7839a1588896a434bb3b0616ecd02af3f5b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c84e216d9bf618464d6b9564d71d9a656433e7c4">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_33a92c6b7b1e8e3d11915ec9aed41b8ed6e1cf0e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/ba9791d379ee9f9fc291dcac88f89a03226c6c65/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f3ee23ef25c9a8fe3d40246d0b7097267963a612">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_e6065503f16ce5bb3a988a5e790af67be85d429f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/01244a80a5cf970def7399668c068e3502dbfdca/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d8bd2268fdcbfd52c76ade65d9900cd8def93a44">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_7affe816231b1823d10afcbedf498a6113697b05.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/adc3144f4043b2c8bee998f4882eb6df00950e5b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f9b41622897665678d31d78e57a361cb0cebcb0d">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_28f9b1350328b150a998c7f3aa90ae0bff3ee01e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/5dff37e14a66b84a97e5c993c4e234cb728b0259/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6eb9107eb34d2fe2b020662b7fbbec991dcba846">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_0899475ed877012c68df0d00c8aaaa1971414e67.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/Documents/adt-bundle-mac-x86_64-20140702/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.0/support-annotations-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6be858a75633b1f0a2d24cad740db57775cb6871">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/support-annotations-24.2.0_fc04b10934d82d5b2342dcb54533ea9b4504817c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/39a7d89359f544ac6e53019e930d80db24606d47/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="beac40bcc8a320a896dd15f5109cfcaea5e1e0e3">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_886c3e3902e7a3b5a63be48dfcb97427cd404a6c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/aa2fc93d8cb798a7316ffbf7bf305f4094cffad8/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="45f5eda279825ff470e3f51019d374d1ef61e000">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_704e781d9397676f6c996968d4b6a6eb119b64b7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/503ef7839a1588896a434bb3b0616ecd02af3f5b/output/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6e02e34594ebe9c0501ffda8dd48497f81b82977">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.0_8562a6a73c334442c8e141d191d0eac2a9c0e9b7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/e74fc2afdee5bc0d2db8aabeea284e64b1e45fbd/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="fcc945a86ebcbf527429acb8216ec7dae2c06417">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_b085abe95615a57b20478d244f18027075e40b63.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/e74fc2afdee5bc0d2db8aabeea284e64b1e45fbd/output/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="60d7b23621d31e6f42f4f76f16af467e57a20cda">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.0_597affcabace22bc484a51cfb20f87994a2b4511.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/f2a409356f98dac07d1e7a77451355ac73481ca7/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c3c638be6e650b165ab9ae144857b64e82787fad">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/classes_72985a3df42632149c74b5bba21772441b90dba8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/adc3144f4043b2c8bee998f4882eb6df00950e5b/output/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="771b3cc0e597b54da25f8086ba73180c59c6bc71">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.0_8137893b167ce63f8a71554a03649f7efe45c16a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vraman/.android/build-cache/01244a80a5cf970def7399668c068e3502dbfdca/output/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="032a4b53def5e2ceedfc2e793b126c0163cfa1dd">
+        <dex dex="/Users/vraman/Desktop/Twitter CodeChallenge for Radhika Sampath/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.0_4a35d165cdba6aa4807f000d391bd6a025c056bf.jar" />
+    </item>
+
+</items>
