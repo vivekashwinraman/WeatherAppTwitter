@@ -45,7 +45,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.txtView.setText(fiveDayWeatherList.get(position).getName());
+        holder.txtView.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
     }
 
     @Override
