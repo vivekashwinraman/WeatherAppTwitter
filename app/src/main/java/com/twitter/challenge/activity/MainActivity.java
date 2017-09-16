@@ -1,4 +1,4 @@
-package com.twitter.challenge;
+package com.twitter.challenge.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.twitter.challenge.R;
 import com.twitter.challenge.adapters.WeatherAdapter;
 import com.twitter.challenge.model.WeatherCondition;
 import com.twitter.challenge.network.WeatherClient;

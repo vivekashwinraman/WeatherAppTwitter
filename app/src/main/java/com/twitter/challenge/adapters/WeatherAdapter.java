@@ -15,14 +15,15 @@ import java.util.List;
  * Created by edk763 on 9/16/17.
  */
 
-public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHolder> {
 
-    private List<WeatherCondition> horizontalList;
+public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    private List<WeatherCondition> fiveDayWeatherList;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txtView;
 
-        public MyViewHolder(View view) {
+        public ViewHolder(View view) {
             super(view);
             txtView = (TextView) view.findViewById(R.id.temperature);
 
@@ -30,25 +31,25 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHo
     }
 
 
-    public WeatherAdapter(List<WeatherCondition> horizontalList) {
-        this.horizontalList = horizontalList;
+    public WeatherAdapter(List<WeatherCondition> fiveDayWeatherList) {
+        this.fiveDayWeatherList = fiveDayWeatherList;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.txtView.setText(horizontalList.get(position).getName());
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.txtView.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
     }
 
     @Override
     public int getItemCount() {
-        return horizontalList.size();
+        return fiveDayWeatherList.size();
     }
 }
