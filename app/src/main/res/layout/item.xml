@@ -6,11 +6,10 @@
 
     <ImageView
         android:id="@+id/weatherIcon"
-        android:layout_margin="@dimen/margin_small"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/temperature"

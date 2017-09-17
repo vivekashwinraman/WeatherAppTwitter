@@ -1,5 +1,6 @@
 package com.twitter.challenge.activity;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView temperatureView ;
     private TextView windSpeedView ;
     private Button button ;
+    private ImageView cloudView ;
 
 
     private final ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         locationView = (TextView) findViewById(R.id.location);
         windSpeedView = (TextView) findViewById(R.id.wind_speed);
         temperatureView = (TextView) findViewById(R.id.temperature);
+        cloudView = (ImageView) findViewById(R.id.cloud);
+
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
         adapter = new WeatherAdapter(weatherConditionList);
@@ -156,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
                         locationView.setText(weatherCondition.getName());
                         temperatureView.setText(temperatureString);
                         windSpeedView.setText(String.valueOf(weatherCondition.getWind().getSpeed()));
+                        if(weatherCondition.getClouds().getCloudiness() > 50) {
+                            cloudView.setImageResource(R.mipmap.rain);
+                        } else {
+                            cloudView.setImageResource(R.mipmap.sun);
+
+                        }
                     }
                 });
         compositeSubscription.add(subscription);
