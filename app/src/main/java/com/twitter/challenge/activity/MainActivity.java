@@ -1,6 +1,5 @@
 package com.twitter.challenge.activity;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,8 +17,6 @@ import com.twitter.challenge.model.WeatherCondition;
 import com.twitter.challenge.network.WeatherClient;
 import com.twitter.challenge.network.WeatherInterface;
 import com.twitter.challenge.utils.TemperatureConverter;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
