@@ -28,7 +28,5 @@
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/temperature"
-        android:textSize="@dimen/text_very_small"
-        android:text="@string/wind"
-         />
+        android:textSize="@dimen/text_very_small"/>
 </RelativeLayout>

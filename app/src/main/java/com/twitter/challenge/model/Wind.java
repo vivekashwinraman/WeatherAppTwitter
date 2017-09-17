@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class Wind {
     @SerializedName("speed")
     @Expose
-    private Double speed;
+    private String speed;
     @SerializedName("deg")
     @Expose
     private Integer deg;
@@ -27,17 +27,17 @@ public class Wind {
      * @param speed
      * @param deg
      */
-    public Wind(Double speed, Integer deg) {
+    public Wind(String speed, Integer deg) {
         super();
         this.speed = speed;
         this.deg = deg;
     }
 
-    public Double getSpeed() {
+    public String getSpeed() {
         return speed;
     }
 
-    public void setSpeed(Double speed) {
+    public void setSpeed(String speed) {
         this.speed = speed;
     }
 
