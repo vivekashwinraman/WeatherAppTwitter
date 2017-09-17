@@ -8,6 +8,7 @@ import java.util.List;
 
 public class StandardDevCalculator {
     public static float calculate(List<Float> data) {
+
         return (float)Math.sqrt(getVariance(data));
     }
 
@@ -26,5 +27,8 @@ public class StandardDevCalculator {
                 temp += (a - mean)*( a - mean);
             return temp/(data.size()-1);
         }
+
+
+
 
 }
