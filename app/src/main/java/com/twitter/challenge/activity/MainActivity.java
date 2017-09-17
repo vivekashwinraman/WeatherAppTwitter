@@ -18,7 +18,6 @@ import com.twitter.challenge.network.WeatherInterface;
 import com.twitter.challenge.utils.TemperatureConverter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationView = (TextView) findViewById(R.id.location);
         windSpeedView = (TextView) findViewById(R.id.wind_speed);
+        temperatureView = (TextView) findViewById(R.id.temperature);
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
         adapter = new WeatherAdapter(weatherConditionList);
