@@ -13,11 +13,15 @@ import android.widget.Toast;
 
 import com.twitter.challenge.R;
 import com.twitter.challenge.adapters.WeatherAdapter;
+import com.twitter.challenge.model.Clouds;
+import com.twitter.challenge.model.Weather;
 import com.twitter.challenge.model.WeatherCondition;
+import com.twitter.challenge.model.Wind;
 import com.twitter.challenge.network.APIInteractor;
 import com.twitter.challenge.utils.TemperatureConverter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
@@ -136,27 +140,40 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void makeGetFutureCall() {
-        for (int i = 1; i <= 5; i++) {
-            compositeSubscription.add(apiInteractor.getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
-                @Override
-                public void onNext(WeatherCondition weatherCondition) {
-                    Log.v("test", "day number : " + weatherCondition.getDay());
-                    weatherConditionList.add(weatherCondition);
-                }
+//        for (int i = 1; i <= 5; i++) {
+//            compositeSubscription.add(apiInteractor.getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
+//                @Override
+//                public void onNext(WeatherCondition weatherCondition) {
+//                    Log.v("test", "day number : " + weatherCondition.getDay());
+//                    weatherConditionList.add(weatherCondition);
+//                }
+//
+//                @Override
+//                public void onCompleted() {
+//                    adapter.notifyDataSetChanged();
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+//                    if (e instanceof HttpException) {
+//                        HttpException response = (HttpException) e;
+//                        Log.d("RetrofitTest", "Error code: " + response.code());
+//                    }
+//                }
+//            }));
+//        }
 
-                @Override
-                public void onCompleted() {
-                    adapter.notifyDataSetChanged();
-                }
+        weatherConditionList.addAll(initialiseFutureList());
+        adapter.notifyDataSetChanged();
+    }
 
-                @Override
-                public void onError(Throwable e) {
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        Log.d("RetrofitTest", "Error code: " + response.code());
-                    }
-                }
-            }));
+    private List<WeatherCondition> initialiseFutureList() {
+
+        List<WeatherCondition> emptyWeatherConditionList = new ArrayList<>();
+        for(int i = 0; i < 5; i++) {
+            emptyWeatherConditionList.add(new WeatherCondition(null, new Weather(0.0f, 0, 0), new Wind(0d, 0), null, new Clouds(0), ""));
         }
+        return  emptyWeatherConditionList;
+
     }
 }
