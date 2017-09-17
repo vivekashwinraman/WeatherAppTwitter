@@ -20,6 +20,7 @@
     <item name="gray" type="color">#BDBDBD</item>
     <item name="light_gray" type="color">#D3D3D3</item>
     <item name="very_light_gray" type="color">#F1F1F1</item>
+    <item name="weather_blue" type="color">#1CB3F7</item>
 
     <integer-array name="androidcolors">
         <item>@color/blue</item>

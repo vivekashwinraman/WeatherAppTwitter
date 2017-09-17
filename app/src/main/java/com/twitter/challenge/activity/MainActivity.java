@@ -20,6 +20,8 @@ import com.twitter.challenge.network.WeatherClient;
 import com.twitter.challenge.network.WeatherInterface;
 import com.twitter.challenge.utils.TemperatureConverter;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import retrofit2.adapter.rxjava.HttpException;
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView windSpeedView ;
     private Button button ;
     private ImageView cloudView ;
+    private TextView titleView;
+    private View dividerView;
 
 
     private final ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         windSpeedView = (TextView) findViewById(R.id.wind_speed);
         temperatureView = (TextView) findViewById(R.id.temperature);
         cloudView = (ImageView) findViewById(R.id.cloud);
+        titleView = (TextView) findViewById(R.id.list_title);
+        dividerView = findViewById(R.id.divider);
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
@@ -77,9 +83,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     button.setText(R.string.hide_future);
                     recyclerView.setVisibility(View.VISIBLE);
+                    titleView.setVisibility(View.VISIBLE);
+                    dividerView.setVisibility(View.VISIBLE);
                 } else {
                     button.setText(R.string.show_future);
                     recyclerView.setVisibility(View.GONE);
+                    titleView.setVisibility(View.GONE);
+                    dividerView.setVisibility(View.GONE);
                 }
 
             }
@@ -157,11 +167,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onNext(WeatherCondition weatherCondition) {
                         Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
                         Log.d("Hello", weatherCondition.getName());
-                        String temperatureString = String.valueOf(weatherCondition.getWeather().getTemp())+"F/"
-                                + TemperatureConverter.celsiusToFahrenheit(weatherCondition.getWeather().getTemp())+"C";
+                        char deg = (char) 0x00B0;
+                        String temperatureString = String.valueOf(Math.round(weatherCondition.getWeather().getTemp()))+ deg +"F/ "
+                                + TemperatureConverter.celsiusToFahrenheit(Math.round(weatherCondition.getWeather().getTemp()))+ deg +"C";
                         locationView.setText(weatherCondition.getName());
                         temperatureView.setText(temperatureString);
-                        windSpeedView.setText(String.valueOf(weatherCondition.getWind().getSpeed()));
+                        windSpeedView.setText("Wind Speed "+String.valueOf(weatherCondition.getWind().getSpeed()));
                         if(weatherCondition.getClouds().getCloudiness() > 50) {
                             cloudView.setImageResource(R.mipmap.rain);
                         } else {
