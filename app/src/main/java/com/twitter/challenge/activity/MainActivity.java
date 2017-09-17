@@ -13,12 +13,15 @@ import android.widget.Toast;
 
 import com.twitter.challenge.R;
 import com.twitter.challenge.adapters.WeatherAdapter;
+import com.twitter.challenge.model.Clouds;
+import com.twitter.challenge.model.Weather;
 import com.twitter.challenge.model.WeatherCondition;
+import com.twitter.challenge.model.Wind;
 import com.twitter.challenge.network.APIInteractor;
 import com.twitter.challenge.utils.TemperatureConverter;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
@@ -106,23 +109,19 @@ public class MainActivity extends AppCompatActivity {
             public void onNext(WeatherCondition weatherCondition) {
                 Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
                 Log.d("Hello", weatherCondition.getName());
-
-                DecimalFormat df = new DecimalFormat("##.#");
-                String temperatureString =  String.format(getResources().getString(R.string.temperature),
-                        df.format(weatherCondition.getWeather().getTemp()),
-                        df.format(TemperatureConverter.celsiusToFahrenheit(weatherCondition.getWeather().getTemp())));
-
+                char deg = (char) 0x00B0;
+                String temperatureString = String.valueOf(Math.round(weatherCondition.getWeather().getTemp())) + deg + "F/ "
+                        + TemperatureConverter.celsiusToFahrenheit(Math.round(weatherCondition.getWeather().getTemp())) + deg + "C";
                 locationView.setText(weatherCondition.getName());
                 temperatureView.setText(temperatureString);
-                windSpeedView.setText(String.format(getResources().getString(R.string.wind),weatherCondition.getWind().getSpeed()));
-                if(weatherCondition.getClouds().getCloudiness() > 50) {
+                windSpeedView.setText("Wind Speed " + String.valueOf(weatherCondition.getWind().getSpeed()));
+                if (weatherCondition.getClouds().getCloudiness() > 50) {
                     cloudView.setImageResource(R.mipmap.rain);
                 } else {
                     cloudView.setImageResource(R.mipmap.sun);
 
                 }
             }
-
 
             @Override
             public void onCompleted() {
@@ -141,28 +140,40 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void makeGetFutureCall() {
-        for (int i = 1; i <= 5; i++) {
-            compositeSubscription.add(apiInteractor.getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
-                @Override
-                public void onNext(WeatherCondition weatherCondition) {
-                    Log.v("test", "day number : " + weatherCondition.getDay());
-                    weatherConditionList.add(weatherCondition);
-                }
+//        for (int i = 1; i <= 5; i++) {
+//            compositeSubscription.add(apiInteractor.getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
+//                @Override
+//                public void onNext(WeatherCondition weatherCondition) {
+//                    Log.v("test", "day number : " + weatherCondition.getDay());
+//                    weatherConditionList.add(weatherCondition);
+//                }
+//
+//                @Override
+//                public void onCompleted() {
+//                    adapter.notifyDataSetChanged();
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+//                    if (e instanceof HttpException) {
+//                        HttpException response = (HttpException) e;
+//                        Log.d("RetrofitTest", "Error code: " + response.code());
+//                    }
+//                }
+//            }));
+//        }
 
-                @Override
-                public void onCompleted() {
-                    adapter.notifyDataSetChanged();
-                }
+        weatherConditionList.addAll(initialiseFutureList());
+        adapter.notifyDataSetChanged();
+    }
 
-                @Override
-                public void onError(Throwable e) {
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        Log.d("RetrofitTest", "Error code: " + response.code());
+    private List<WeatherCondition> initialiseFutureList() {
 
-                    }
-                }
-            }));
+        List<WeatherCondition> emptyWeatherConditionList = new ArrayList<>();
+        for(int i = 0; i < 5; i++) {
+            emptyWeatherConditionList.add(new WeatherCondition(null, new Weather(0.0f, 0, 0), new Wind(0d, 0), null, new Clouds(0), ""));
         }
+        return  emptyWeatherConditionList;
+
     }
 }
