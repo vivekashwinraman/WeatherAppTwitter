@@ -2,7 +2,7 @@ package com.twitter.challenge.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     WeatherInterface weatherInterface;
 
     private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager horizontalLayoutManager;
     private WeatherAdapter adapter;
 
 
@@ -57,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new WeatherAdapter(weatherConditionList);
 
-        LinearLayoutManager horizontalLayoutManagaer
-                = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(horizontalLayoutManagaer);
+        horizontalLayoutManager
+                = new GridLayoutManager(MainActivity.this, 5);
+        recyclerView.setLayoutManager(horizontalLayoutManager);
 
         recyclerView.setAdapter(adapter);
 
