@@ -21,11 +21,14 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     private List<WeatherCondition> fiveDayWeatherList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtView;
+        public TextView temperature;
+        public TextView windView;
+
 
         public ViewHolder(View view) {
             super(view);
-            txtView = (TextView) view.findViewById(R.id.temperature);
+            temperature = (TextView) view.findViewById(R.id.temperature);
+            windView = (TextView) view.findViewById(R.id.wind);
 
         }
     }
@@ -45,7 +48,8 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.txtView.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
+        holder.temperature.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
+        holder.windView.setText(String.valueOf(fiveDayWeatherList.get(position).getWind().getSpeed()));
     }
 
     @Override

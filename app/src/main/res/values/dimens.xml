@@ -4,6 +4,7 @@
     <dimen name="text_small">15dp</dimen>
     <dimen name="text_medium">20dp</dimen>
     <dimen name="text_large">25dp</dimen>
+    <dimen name="text_extra_large">30dp</dimen>
 
     <dimen name="padding_extra_large">50dp</dimen>
     <dimen name="padding_large">15dp</dimen>
