@@ -17,6 +17,7 @@ import com.twitter.challenge.model.WeatherCondition;
 import com.twitter.challenge.network.APIInteractor;
 import com.twitter.challenge.utils.TemperatureConverter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import retrofit2.adapter.rxjava.HttpException;
@@ -105,19 +106,23 @@ public class MainActivity extends AppCompatActivity {
             public void onNext(WeatherCondition weatherCondition) {
                 Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
                 Log.d("Hello", weatherCondition.getName());
-                char deg = (char) 0x00B0;
-                String temperatureString = String.valueOf(Math.round(weatherCondition.getWeather().getTemp())) + deg + "F/ "
-                        + TemperatureConverter.celsiusToFahrenheit(Math.round(weatherCondition.getWeather().getTemp())) + deg + "C";
+
+                DecimalFormat df = new DecimalFormat("##.#");
+                String temperatureString =  String.format(getResources().getString(R.string.temperature),
+                        df.format(weatherCondition.getWeather().getTemp()),
+                        df.format(TemperatureConverter.celsiusToFahrenheit(weatherCondition.getWeather().getTemp())));
+
                 locationView.setText(weatherCondition.getName());
                 temperatureView.setText(temperatureString);
-                windSpeedView.setText("Wind Speed " + String.valueOf(weatherCondition.getWind().getSpeed()));
-                if (weatherCondition.getClouds().getCloudiness() > 50) {
+                windSpeedView.setText(String.format(getResources().getString(R.string.wind),weatherCondition.getWind().getSpeed()));
+                if(weatherCondition.getClouds().getCloudiness() > 50) {
                     cloudView.setImageResource(R.mipmap.rain);
                 } else {
                     cloudView.setImageResource(R.mipmap.sun);
 
                 }
             }
+
 
             @Override
             public void onCompleted() {
@@ -154,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     if (e instanceof HttpException) {
                         HttpException response = (HttpException) e;
                         Log.d("RetrofitTest", "Error code: " + response.code());
+
                     }
                 }
             }));

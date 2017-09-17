@@ -36,7 +36,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         }
     }
 
-
     public WeatherAdapter(List<WeatherCondition> fiveDayWeatherList) {
         this.fiveDayWeatherList = fiveDayWeatherList;
     }
@@ -57,7 +56,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             holder.cloudView.setImageResource(R.mipmap.sun);
         }
         holder.temperature.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
-        holder.windView.setText(String.valueOf(fiveDayWeatherList.get(position).getWind().getSpeed()));
+        holder.windView.setText(fiveDayWeatherList.get(position).getWind().getSpeed());
     }
 
     @Override

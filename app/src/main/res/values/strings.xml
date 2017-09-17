@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Tweather</string>
     <string name="current_temperature">Current temperature</string>
-    <string name="temperature">%1$f °C / %2$f °F</string>
-    <string name="wind">SE 7 MPH</string>
+    <string name="temperature">%1$s °C / %2$s °F</string>
+    <string name="wind">Wind Speed %1$s</string>
     <string name="hide_future">Hide Future</string>
     <string name="show_future">Show Future</string>
     <string name="five_day">Five Day Weather</string>
