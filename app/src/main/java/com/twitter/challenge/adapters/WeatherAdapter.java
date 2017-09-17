@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twitter.challenge.R;
@@ -23,10 +24,12 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView temperature;
         public TextView windView;
+        public ImageView cloudView;
 
 
         public ViewHolder(View view) {
             super(view);
+            cloudView = (ImageView) view.findViewById(R.id.weatherIcon);
             temperature = (TextView) view.findViewById(R.id.temperature);
             windView = (TextView) view.findViewById(R.id.wind);
 
@@ -48,6 +51,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        if(fiveDayWeatherList.get(position).getClouds().getCloudiness() > 50) {
+            holder.cloudView.setImageResource(R.mipmap.rain);
+        } else {
+            holder.cloudView.setImageResource(R.mipmap.sun);
+        }
         holder.temperature.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
         holder.windView.setText(String.valueOf(fiveDayWeatherList.get(position).getWind().getSpeed()));
     }

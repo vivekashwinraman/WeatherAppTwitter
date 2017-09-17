@@ -17,4 +17,6 @@
     <dimen name="margin_large">15dp</dimen>
     <dimen name="margin_very_large">20dp</dimen>
     <dimen name="margin_extra_large">55dp</dimen>
+
+    <dimen name="image_size">60dp</dimen>
 </resources>

@@ -5,4 +5,5 @@
     <string name="wind">SE 7 MPH</string>
     <string name="hide_future">Hide Future</string>
     <string name="show_future">Show Future</string>
+    <string name="five_day">Five Day Weather</string>
 </resources>
