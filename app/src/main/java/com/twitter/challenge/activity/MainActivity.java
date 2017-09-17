@@ -13,19 +13,16 @@ import com.twitter.challenge.adapters.WeatherAdapter;
 import com.twitter.challenge.model.WeatherCondition;
 import com.twitter.challenge.network.WeatherClient;
 import com.twitter.challenge.network.WeatherInterface;
-import com.twitter.challenge.utils.TemperatureConverter;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,39 +31,46 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager horizontalLayoutManager;
     private WeatherAdapter adapter;
-    private TextView temperatureView ;
-    private TextView windSpeedView ;
-
-
-
+    private TextView temperatureView;
+    private TextView windSpeedView;
+    protected CompositeSubscription compositeSubscription;
     private final ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
-    private final ArrayList<Subscription> subscriptions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        makeGetCurrentCall();
-
-        makeGetFutureCall();
-    }
-
-    private void makeGetFutureCall() {
+        temperatureView = (TextView) findViewById(R.id.temperature);
+        windSpeedView = (TextView) findViewById(R.id.wind_speed);
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
-
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
-
         adapter = new WeatherAdapter(weatherConditionList);
-
         horizontalLayoutManager
                 = new GridLayoutManager(MainActivity.this, 5);
         recyclerView.setLayoutManager(horizontalLayoutManager);
-
         recyclerView.setAdapter(adapter);
+        compositeSubscription = new CompositeSubscription();
+        makeGetCurrentCall();
+        makeGetFutureCall();
+    }
 
-        for (int i = 1 ; i <= 5; i++) {
-            Observable<WeatherCondition> call = weatherInterface.getFuture(""+i);
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeSubscription.unsubscribe();
+    }
+
+
+    private void makeGetFutureCall() {
+
+        for (int i = 1; i <= 5; i++) {
+            Observable<WeatherCondition> call = weatherInterface.getFuture("" + i);
 
             Subscription subscription = call
                     .subscribeOn(Schedulers.io())
@@ -92,36 +96,39 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-            subscriptions.add(subscription);
-            Log.d("Future"+i, ""+subscriptions.size());
+            compositeSubscription.add(subscription);
         }
     }
 
 
     private void makeGetCurrentCall() {
-        temperatureView = (TextView) findViewById(R.id.temperature);
-        windSpeedView = (TextView) findViewById(R.id.wind_speed);
+        Observable<WeatherCondition> call = weatherInterface.getCurrent();
+        Subscription subscription = call
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WeatherCondition>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
 
-        Call call = weatherInterface.getCurrent();
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.d("Hello", ""+response);
-                WeatherCondition weatherCondition = (WeatherCondition) response.body();
-                Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
-                Log.d("Hello", weatherCondition.getName());
-                temperatureView.setText(String.valueOf(weatherCondition.getWeather().getTemp()));
-                windSpeedView.setText(String.valueOf(weatherCondition.getWind().getSpeed()));
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            Log.d("RetrofitTest", "Error code: " + response.code());
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                Log.d("Hello", t.getMessage());
-                call.cancel();
-            }
-        });
-
+                    @Override
+                    public void onNext(WeatherCondition weatherCondition) {
+                        Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
+                        Log.d("Hello", weatherCondition.getName());
+                        temperatureView.setText(String.valueOf(weatherCondition.getWeather().getTemp()));
+                        windSpeedView.setText(String.valueOf(weatherCondition.getWind().getSpeed()));
+                    }
+                });
+        compositeSubscription.add(subscription);
     }
 
 }
