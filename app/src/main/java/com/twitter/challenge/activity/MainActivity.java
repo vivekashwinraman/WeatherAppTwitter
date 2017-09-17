@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        temperatureView = (TextView) findViewById(R.id.temperature);
+        locationView = (TextView) findViewById(R.id.location);
         windSpeedView = (TextView) findViewById(R.id.wind_speed);
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
