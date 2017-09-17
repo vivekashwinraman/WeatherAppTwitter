@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager horizontalLayoutManager;
     private WeatherAdapter adapter;
+    private TextView temperatureView ;
+    private TextView windSpeedView ;
+
 
 
     private final ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
@@ -47,10 +50,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
-        //makeGetCurrentCall();
+        makeGetCurrentCall();
 
-        final TextView temperatureView = (TextView) findViewById(R.id.temperature);
-        temperatureView.setText(getString(R.string.temperature, 34f, TemperatureConverter.celsiusToFahrenheit(34)));
+//        temperatureView.setText(getString(R.string.temperature, 34f, TemperatureConverter.celsiusToFahrenheit(34)));
 
         //makeGetFutureCall();
         //Log.d("Future", ""+weatherConditionList.size());
@@ -98,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void makeGetCurrentCall() {
+        temperatureView = (TextView) findViewById(R.id.temperature);
+        windSpeedView = (TextView) findViewById(R.id.wind_speed);
+
 
         Call call = weatherInterface.getCurrent();
         call.enqueue(new Callback() {
@@ -107,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 WeatherCondition weatherCondition = (WeatherCondition) response.body();
                 Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
                 Log.d("Hello", weatherCondition.getName());
+                temperatureView.setText(String.valueOf(weatherCondition.getWeather().getTemp()));
+                windSpeedView.setText(String.valueOf(weatherCondition.getWind().getSpeed()));
             }
 
             @Override
