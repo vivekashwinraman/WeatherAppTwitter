@@ -47,16 +47,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        makeGetCurrentCall();
+
+        makeGetFutureCall();
+    }
+
+    private void makeGetFutureCall() {
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
         weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
-        makeGetCurrentCall();
-
-//        temperatureView.setText(getString(R.string.temperature, 34f, TemperatureConverter.celsiusToFahrenheit(34)));
-
-        //makeGetFutureCall();
-        //Log.d("Future", ""+weatherConditionList.size());
-
 
         adapter = new WeatherAdapter(weatherConditionList);
 
