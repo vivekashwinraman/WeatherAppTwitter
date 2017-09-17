@@ -14,35 +14,28 @@ import android.widget.Toast;
 import com.twitter.challenge.R;
 import com.twitter.challenge.adapters.WeatherAdapter;
 import com.twitter.challenge.model.WeatherCondition;
-import com.twitter.challenge.network.WeatherClient;
-import com.twitter.challenge.network.WeatherInterface;
+import com.twitter.challenge.network.APIInteractor;
 import com.twitter.challenge.utils.TemperatureConverter;
 
 import java.util.ArrayList;
 
 import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity {
-
-    WeatherInterface weatherInterface;
-
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager horizontalLayoutManager;
     private WeatherAdapter adapter;
     protected CompositeSubscription compositeSubscription;
-    private TextView locationView ;
-    private TextView temperatureView ;
-    private TextView windSpeedView ;
-    private Button button ;
-    private ImageView cloudView ;
+    private TextView locationView;
+    private TextView temperatureView;
+    private TextView windSpeedView;
+    private Button button;
+    private ImageView cloudView;
     private TextView titleView;
     private View dividerView;
+    private APIInteractor apiInteractor;
 
 
     private final ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
@@ -60,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         dividerView = findViewById(R.id.divider);
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
-        weatherInterface = WeatherClient.getClient().create(WeatherInterface.class);
+        apiInteractor = APIInteractor.getInstance();
         adapter = new WeatherAdapter(weatherConditionList);
         horizontalLayoutManager
                 = new GridLayoutManager(MainActivity.this, 5);
@@ -71,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(!recyclerView.isShown()) {
+                if (!recyclerView.isShown()) {
                     if (weatherConditionList.size() < 5) {
                         weatherConditionList.clear();
                         adapter.notifyDataSetChanged();
@@ -106,78 +99,64 @@ public class MainActivity extends AppCompatActivity {
         compositeSubscription.unsubscribe();
     }
 
+    private void makeGetCurrentCall() {
+        compositeSubscription.add(apiInteractor.getCurrent().subscribe(new Subscriber<WeatherCondition>() {
+            @Override
+            public void onNext(WeatherCondition weatherCondition) {
+                Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
+                Log.d("Hello", weatherCondition.getName());
+                char deg = (char) 0x00B0;
+                String temperatureString = String.valueOf(Math.round(weatherCondition.getWeather().getTemp())) + deg + "F/ "
+                        + TemperatureConverter.celsiusToFahrenheit(Math.round(weatherCondition.getWeather().getTemp())) + deg + "C";
+                locationView.setText(weatherCondition.getName());
+                temperatureView.setText(temperatureString);
+                windSpeedView.setText("Wind Speed " + String.valueOf(weatherCondition.getWind().getSpeed()));
+                if (weatherCondition.getClouds().getCloudiness() > 50) {
+                    cloudView.setImageResource(R.mipmap.rain);
+                } else {
+                    cloudView.setImageResource(R.mipmap.sun);
+
+                }
+            }
+
+            @Override
+            public void onCompleted() {
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (e instanceof HttpException) {
+                    HttpException response = (HttpException) e;
+                    Log.d("RetrofitTest", "Error code: " + response.code());
+                }
+            }
+        }));
+    }
+
 
     private void makeGetFutureCall() {
-
         for (int i = 1; i <= 5; i++) {
-            Observable<WeatherCondition> call = weatherInterface.getFuture("" + i);
-            Subscription subscription = call
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<WeatherCondition>() {
-                        @Override
-                        public void onCompleted() {
+            compositeSubscription.add(apiInteractor.getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
+                @Override
+                public void onNext(WeatherCondition weatherCondition) {
+                    Log.v("test", "day number : " + weatherCondition.getDay());
+                    weatherConditionList.add(weatherCondition);
+                }
 
-                        }
+                @Override
+                public void onCompleted() {
+                    adapter.notifyDataSetChanged();
+                }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            if (e instanceof HttpException) {
-                                HttpException response = (HttpException) e;
-                                Log.d("RetrofitTest", "Error code: " + response.code());
-                            }
-                        }
-
-                        @Override
-                        public void onNext(WeatherCondition weatherCondition) {
-                            weatherConditionList.add(weatherCondition);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-
-            compositeSubscription.add(subscription);
+                @Override
+                public void onError(Throwable e) {
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        Log.d("RetrofitTest", "Error code: " + response.code());
+                    }
+                }
+            }));
         }
     }
-
-
-    private void makeGetCurrentCall() {
-        Observable<WeatherCondition> call = weatherInterface.getCurrent();
-        Subscription subscription = call
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WeatherCondition>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            Log.d("RetrofitTest", "Error code: " + response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onNext(WeatherCondition weatherCondition) {
-                        Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
-                        Log.d("Hello", weatherCondition.getName());
-                        char deg = (char) 0x00B0;
-                        String temperatureString = String.valueOf(Math.round(weatherCondition.getWeather().getTemp()))+ deg +"F/ "
-                                + TemperatureConverter.celsiusToFahrenheit(Math.round(weatherCondition.getWeather().getTemp()))+ deg +"C";
-                        locationView.setText(weatherCondition.getName());
-                        temperatureView.setText(temperatureString);
-                        windSpeedView.setText("Wind Speed "+String.valueOf(weatherCondition.getWind().getSpeed()));
-                        if(weatherCondition.getClouds().getCloudiness() > 50) {
-                            cloudView.setImageResource(R.mipmap.rain);
-                        } else {
-                            cloudView.setImageResource(R.mipmap.sun);
-
-                        }
-                    }
-                });
-        compositeSubscription.add(subscription);
-    }
-
 }

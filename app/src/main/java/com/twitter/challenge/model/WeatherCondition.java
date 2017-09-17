@@ -27,6 +27,8 @@ public class WeatherCondition {
     @Expose
     private String name;
 
+    private int day;
+
     /**
      * No args constructor for use in serialization
      *
@@ -99,6 +101,14 @@ public class WeatherCondition {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 
 }
