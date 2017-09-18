@@ -125,9 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 populateCurrentWeatherCondition();
             }
 
-            Log.d(TAG, "Internet Connectivity Issues");
         } else {
-            cloudView.setImageResource(R.mipmap.error_cloud);
+            Log.d(TAG, "Internet Connectivity Issues");
+            if(currentWeatherLoaded) {
+                populateCurrentWeatherCondition();
+            } else {
+                cloudView.setImageResource(R.mipmap.error_cloud);
+            }
         }
     }
 
