@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by edk763 on 9/16/17.
  */
 
-public class Weather implements Parcelable{
+public class Weather implements Parcelable {
     @SerializedName("temp")
     @Expose
     private Float temp;

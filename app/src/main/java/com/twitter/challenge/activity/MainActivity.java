@@ -1,6 +1,7 @@
 package com.twitter.challenge.activity;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,8 +32,10 @@ import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String LIST_STATE_KEY = "list_state";
+    private static final String TAG = MainActivity.class.getName();;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager horizontalLayoutManager;
+    private RecyclerView.LayoutManager layoutManager;
     private WeatherAdapter adapter;
     protected CompositeSubscription compositeSubscription;
     private TextView locationView;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private View dividerView;
     private List<View> list;
     private ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
+    private Parcelable mListState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         adapter = new WeatherAdapter(weatherConditionList);
-        horizontalLayoutManager
+        layoutManager
                 = new GridLayoutManager(MainActivity.this, 5);
-        recyclerView.setLayoutManager(horizontalLayoutManager);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         button = (Button) findViewById(R.id.future_button);
         list = new ArrayList<View>() {{
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         if(NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             cloudView.setImageResource(0);
             makeGetCurrentCall();
+            Log.d(TAG, "Internet Connectivity Issues");
         } else {
             cloudView.setImageResource(R.mipmap.error_cloud);
         }
@@ -110,6 +115,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
+        // Save list state
+        mListState = layoutManager.onSaveInstanceState();
+        bundle.putParcelable(LIST_STATE_KEY, mListState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        // Retrieve list state and list/item positions
+        if(state != null)
+            mListState = state.getParcelable(LIST_STATE_KEY);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mListState != null) {
+            layoutManager.onRestoreInstanceState(mListState);
+        }
     }
 
     @Override
@@ -122,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
         compositeSubscription.add(APIInteractor.getInstance().getCurrent().subscribe(new Subscriber<WeatherCondition>() {
             @Override
             public void onNext(WeatherCondition weatherCondition) {
-                Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
-                Log.d("Hello", weatherCondition.getName());
 
                 DecimalFormat df = new DecimalFormat("##.#");
                 String temperatureString =  String.format(getResources().getString(R.string.temperature),
@@ -150,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(Throwable e) {
                 if (e instanceof HttpException) {
                     HttpException response = (HttpException) e;
-                    Log.d("RetrofitTest", "Error code: " + response.code());
+                    Log.d("TAG", "Error code: " + response.code());
                 }
             }
         }));
@@ -167,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 compositeSubscription.add(APIInteractor.getInstance().getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
                     @Override
                     public void onNext(WeatherCondition weatherCondition) {
-                        Log.v("test", "day number : " + weatherCondition.getDay());
+                        Log.v(TAG, "day number : " + weatherCondition.getDay());
                         weatherConditionList.set(weatherCondition.getDay() - 1, weatherCondition);
                     }
 
@@ -188,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             HttpException response = (HttpException) e;
-                            Log.d("RetrofitTest", "Error code: " + response.code());
+                            Log.d(TAG, "Error code: " + response.code());
                         }
                     }
                 }));
