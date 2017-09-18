@@ -14,11 +14,6 @@ import com.twitter.challenge.utils.TemperatureConverter;
 import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * Created by edk763 on 9/16/17.
- */
-
-
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
     private List<WeatherCondition> fiveDayWeatherList;

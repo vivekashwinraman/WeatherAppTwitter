@@ -6,11 +6,6 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.schedulers.Schedulers;
 
-
-/**
- * Created by edk763 on 9/16/17.
- */
-
 public class WeatherClient {
     private static Retrofit retrofit = null;
 
