@@ -47,11 +47,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<WeatherCondition> weatherConditionList;
     private String standardDeviation;
     private boolean forecastShown = false;
+    private boolean currentWeatherLoaded = false;
+    private boolean forecastLoaded = false;
     private WeatherCondition currentWeatherCondition;
     private static final String WEATHER_LIST_TAG = "weather_list";
     private static final String FORECAST_SHOWN_TAG = "forecast_shown";
     private static final String STD_DEVIATION = "std_deviation";
     private static final String CURRENT_WEATHER_CONDITION = "current_weather";
+    private static final String CURRENT_WEATHER_LOADED = "current_loaded";
+    private static final String FORECAST_LOADED = "forecast_loaded";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!recyclerView.isShown()) {
-                    if (weatherConditionList.size() < 5) {
+                    if (!forecastLoaded) {
                         weatherConditionList.clear();
                         adapter.notifyDataSetChanged();
                         makeGetFutureCall();
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
             this.forecastShown = savedInstanceState.getBoolean(FORECAST_SHOWN_TAG);
             this.standardDeviation = savedInstanceState.getString(STD_DEVIATION);
             this.currentWeatherCondition = savedInstanceState.getParcelable(CURRENT_WEATHER_CONDITION);
+            this.currentWeatherLoaded = savedInstanceState.getBoolean(CURRENT_WEATHER_LOADED);
+            this.forecastLoaded = savedInstanceState.getBoolean(FORECAST_LOADED);
         }
         showHideList(forecastShown);
         adapter = new WeatherAdapter(weatherConditionList);
@@ -111,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         compositeSubscription = new CompositeSubscription();
         if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             cloudView.setImageResource(0);
-            if (currentWeatherCondition == null) {
+            if (!currentWeatherLoaded) {
                 makeGetCurrentCall();
             } else {
                 populateCurrentWeatherCondition();
@@ -144,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
         bundle.putBoolean(FORECAST_SHOWN_TAG, forecastShown);
         bundle.putString(STD_DEVIATION, standardDeviation);
         bundle.putParcelable(CURRENT_WEATHER_CONDITION, currentWeatherCondition);
+        bundle.putBoolean(CURRENT_WEATHER_LOADED, currentWeatherLoaded);
+        bundle.putBoolean(FORECAST_LOADED, forecastLoaded);
         super.onSaveInstanceState(bundle);
     }
 
@@ -174,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCompleted() {
+                currentWeatherLoaded = true;
             }
 
             @Override
@@ -206,9 +216,9 @@ public class MainActivity extends AppCompatActivity {
                         for (WeatherCondition weatherCondition : weatherConditionList) {
                             stdDevs.add(weatherCondition.getWeather().getTemp());
                         }
-
                         standardDeviation = String.format(getResources().getString(R.string.std_dev), StandardDevCalculator.calculate(stdDevs));
                         tempStandardDevView.setText(standardDeviation);
+                        forecastLoaded = true;
                     }
 
                     @Override
