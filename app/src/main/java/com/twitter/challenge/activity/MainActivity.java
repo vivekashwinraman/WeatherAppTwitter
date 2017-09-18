@@ -1,7 +1,6 @@
 package com.twitter.challenge.activity;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.twitter.challenge.R;
 import com.twitter.challenge.adapters.WeatherAdapter;
@@ -32,8 +30,7 @@ import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LIST_STATE_KEY = "list_state";
-    private static final String TAG = MainActivity.class.getName();;
+    private static final String TAG = MainActivity.class.getName();
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private WeatherAdapter adapter;
@@ -47,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView titleView;
     private View dividerView;
     private List<View> list;
-    private ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
-    private Parcelable mListState;
+    private ArrayList<WeatherCondition> weatherConditionList;
+    private boolean forecastShown = false;
+    private static final String WEATHER_LIST_TAG = "weather_list";
+    private static final String FORECAST_SHOWN_TAG = "forecast_shown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +63,9 @@ public class MainActivity extends AppCompatActivity {
         dividerView = findViewById(R.id.divider);
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
-        adapter = new WeatherAdapter(weatherConditionList);
         layoutManager
                 = new GridLayoutManager(MainActivity.this, 5);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
         button = (Button) findViewById(R.id.future_button);
         list = new ArrayList<View>() {{
             add(recyclerView);
@@ -79,24 +76,32 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (!recyclerView.isShown()) {
                     if (weatherConditionList.size() < 5) {
                         weatherConditionList.clear();
                         adapter.notifyDataSetChanged();
                         makeGetFutureCall();
                     }
-                    button.setText(R.string.hide_future);
                     showHideList(true);
                 } else {
-                    button.setText(R.string.show_future);
                     showHideList(false);
                 }
 
             }
         });
+        if (savedInstanceState == null) {
+            this.weatherConditionList = new ArrayList<>();
+            this.forecastShown = false;
+        } else {
+            this.weatherConditionList = savedInstanceState.getParcelableArrayList(WEATHER_LIST_TAG);
+            this.forecastShown = savedInstanceState.getBoolean(FORECAST_SHOWN_TAG);
+        }
+        showHideList(forecastShown);
+        adapter = new WeatherAdapter(weatherConditionList);
+        recyclerView.setAdapter(adapter);
+
         compositeSubscription = new CompositeSubscription();
-        if(NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+        if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             cloudView.setImageResource(0);
             makeGetCurrentCall();
             Log.d(TAG, "Internet Connectivity Issues");
@@ -106,36 +111,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showHideList(boolean showHide) {
-        for(View view : list) {
-            view.setVisibility(showHide?  View.VISIBLE : View.GONE);
+        for (View view : list) {
+            view.setVisibility(showHide ? View.VISIBLE : View.GONE);
+        }
+        forecastShown = showHide;
+        if (forecastShown) {
+            button.setText(R.string.hide_future);
+        } else {
+            button.setText(R.string.show_future);
         }
     }
 
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
+        bundle.putParcelableArrayList(WEATHER_LIST_TAG, weatherConditionList);
+        bundle.putBoolean(FORECAST_SHOWN_TAG, forecastShown);
         super.onSaveInstanceState(bundle);
-        // Save list state
-        mListState = layoutManager.onSaveInstanceState();
-        bundle.putParcelable(LIST_STATE_KEY, mListState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-
-        // Retrieve list state and list/item positions
-        if(state != null)
-            mListState = state.getParcelable(LIST_STATE_KEY);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (mListState != null) {
-            layoutManager.onRestoreInstanceState(mListState);
-        }
     }
 
     @Override
@@ -150,14 +153,14 @@ public class MainActivity extends AppCompatActivity {
             public void onNext(WeatherCondition weatherCondition) {
 
                 DecimalFormat df = new DecimalFormat("##.#");
-                String temperatureString =  String.format(getResources().getString(R.string.temperature),
+                String temperatureString = String.format(getResources().getString(R.string.temperature),
                         df.format(weatherCondition.getWeather().getTemp()),
                         df.format(TemperatureConverter.celsiusToFahrenheit(weatherCondition.getWeather().getTemp())));
 
                 locationView.setText(weatherCondition.getName());
                 temperatureView.setText(temperatureString);
-                windSpeedView.setText(String.format(getResources().getString(R.string.wind),weatherCondition.getWind().getSpeed()));
-                if(weatherCondition.getClouds().getCloudiness() > 50) {
+                windSpeedView.setText(String.format(getResources().getString(R.string.wind), weatherCondition.getWind().getSpeed()));
+                if (weatherCondition.getClouds().getCloudiness() > 50) {
                     cloudView.setImageResource(R.mipmap.rain);
                 } else {
                     cloudView.setImageResource(R.mipmap.sun);
@@ -184,9 +187,7 @@ public class MainActivity extends AppCompatActivity {
     private void makeGetFutureCall() {
         weatherConditionList.addAll(initialiseFutureList());
         adapter.notifyDataSetChanged();
-
-
-        if(NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+        if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             for (int i = 1; i <= 5; i++) {
                 compositeSubscription.add(APIInteractor.getInstance().getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
                     @Override
@@ -224,10 +225,10 @@ public class MainActivity extends AppCompatActivity {
     private List<WeatherCondition> initialiseFutureList() {
 
         List<WeatherCondition> emptyWeatherConditionList = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             emptyWeatherConditionList.add(new WeatherCondition(null, new Weather(0.0f, 0, 0), new Wind("", 0), null, new Clouds(0), ""));
         }
-        return  emptyWeatherConditionList;
+        return emptyWeatherConditionList;
 
     }
 }
