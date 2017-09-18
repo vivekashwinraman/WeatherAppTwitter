@@ -47,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<WeatherCondition> weatherConditionList;
     private String standardDeviation;
     private boolean forecastShown = false;
+    private WeatherCondition currentWeatherCondition;
     private static final String WEATHER_LIST_TAG = "weather_list";
     private static final String FORECAST_SHOWN_TAG = "forecast_shown";
     private static final String STD_DEVIATION = "std_deviation";
+    private static final String CURRENT_WEATHER_CONDITION = "current_weather";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +97,12 @@ public class MainActivity extends AppCompatActivity {
             this.weatherConditionList = new ArrayList<>();
             this.forecastShown = false;
             this.standardDeviation = new String();
+            this.currentWeatherCondition = null;
         } else {
             this.weatherConditionList = savedInstanceState.getParcelableArrayList(WEATHER_LIST_TAG);
             this.forecastShown = savedInstanceState.getBoolean(FORECAST_SHOWN_TAG);
             this.standardDeviation = savedInstanceState.getString(STD_DEVIATION);
+            this.currentWeatherCondition = savedInstanceState.getParcelable(CURRENT_WEATHER_CONDITION);
         }
         showHideList(forecastShown);
         adapter = new WeatherAdapter(weatherConditionList);
@@ -107,7 +111,12 @@ public class MainActivity extends AppCompatActivity {
         compositeSubscription = new CompositeSubscription();
         if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             cloudView.setImageResource(0);
-            makeGetCurrentCall();
+            if (currentWeatherCondition == null) {
+                makeGetCurrentCall();
+            } else {
+                populateCurrentWeatherCondition();
+            }
+
             Log.d(TAG, "Internet Connectivity Issues");
         } else {
             cloudView.setImageResource(R.mipmap.error_cloud);
@@ -134,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putParcelableArrayList(WEATHER_LIST_TAG, weatherConditionList);
         bundle.putBoolean(FORECAST_SHOWN_TAG, forecastShown);
         bundle.putString(STD_DEVIATION, standardDeviation);
+        bundle.putParcelable(CURRENT_WEATHER_CONDITION, currentWeatherCondition);
         super.onSaveInstanceState(bundle);
     }
 
@@ -158,26 +168,12 @@ public class MainActivity extends AppCompatActivity {
         compositeSubscription.add(APIInteractor.getInstance().getCurrent().subscribe(new Subscriber<WeatherCondition>() {
             @Override
             public void onNext(WeatherCondition weatherCondition) {
-
-                DecimalFormat df = new DecimalFormat("##.#");
-                String temperatureString = String.format(getResources().getString(R.string.temperature),
-                        df.format(weatherCondition.getWeather().getTemp()),
-                        df.format(TemperatureConverter.celsiusToFahrenheit(weatherCondition.getWeather().getTemp())));
-
-                locationView.setText(weatherCondition.getName());
-                temperatureView.setText(temperatureString);
-                windSpeedView.setText(String.format(getResources().getString(R.string.wind), weatherCondition.getWind().getSpeed()));
-                if (weatherCondition.getClouds().getCloudiness() > 50) {
-                    cloudView.setImageResource(R.mipmap.rain);
-                } else {
-                    cloudView.setImageResource(R.mipmap.sun);
-
-                }
+                currentWeatherCondition = weatherCondition;
+                populateCurrentWeatherCondition();
             }
 
             @Override
             public void onCompleted() {
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -236,5 +232,24 @@ public class MainActivity extends AppCompatActivity {
         }
         return emptyWeatherConditionList;
 
+    }
+
+    private void populateCurrentWeatherCondition() {
+        if (currentWeatherCondition != null) {
+            DecimalFormat df = new DecimalFormat("##.#");
+            String temperatureString = String.format(getResources().getString(R.string.temperature),
+                    df.format(currentWeatherCondition.getWeather().getTemp()),
+                    df.format(TemperatureConverter.celsiusToFahrenheit(currentWeatherCondition.getWeather().getTemp())));
+
+            locationView.setText(currentWeatherCondition.getName());
+            temperatureView.setText(temperatureString);
+            windSpeedView.setText(String.format(getResources().getString(R.string.wind), currentWeatherCondition.getWind().getSpeed()));
+            if (currentWeatherCondition.getClouds().getCloudiness() > 50) {
+                cloudView.setImageResource(R.mipmap.rain);
+            } else {
+                cloudView.setImageResource(R.mipmap.sun);
+
+            }
+        }
     }
 }
