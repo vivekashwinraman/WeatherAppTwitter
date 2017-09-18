@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCompleted() {
                 currentWeatherLoaded = true;
             }
-
             @Override
             public void onError(Throwable e) {
                 if (e instanceof HttpException) {
@@ -213,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onCompleted() {
                         adapter.notifyDataSetChanged();
                         List<Float> stdDevs = new ArrayList<>();
-                        for (WeatherCondition weatherCondition : weatherConditionList) {
-                            stdDevs.add(weatherCondition.getWeather().getTemp());
+                        for (WeatherCondition condition : weatherConditionList) {
+                            stdDevs.add(condition.getWeather().getTemp());
                         }
                         standardDeviation = String.format(getResources().getString(R.string.std_dev), StandardDevCalculator.calculate(stdDevs));
                         tempStandardDevView.setText(standardDeviation);

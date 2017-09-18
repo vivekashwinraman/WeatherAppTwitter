@@ -52,6 +52,7 @@ public class APIInteractor {
                         @Override
                         public void onFailure(Call<WeatherCondition> call, Throwable t) {
                             t.printStackTrace();
+                            subscriber.onError(t);
                         }
                     });
                 } catch (Exception e) {
@@ -79,6 +80,7 @@ public class APIInteractor {
                         @Override
                         public void onFailure(Call<WeatherCondition> call, Throwable t) {
                             t.printStackTrace();
+                            subscriber.onError(t);
                         }
                     });
                 } catch (Exception e) {
