@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_WEATHER_CONDITION = "current_weather";
     private static final String CURRENT_WEATHER_LOADED = "current_loaded";
     private static final String FORECAST_LOADED = "forecast_loaded";
+    private int FIVE_DAYS =5;
 
 
     @Override
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         layoutManager
-                = new GridLayoutManager(MainActivity.this, 5);
+                = new GridLayoutManager(MainActivity.this, FIVE_DAYS);
         recyclerView.setLayoutManager(layoutManager);
         button = (Button) findViewById(R.id.future_button);
         list = new ArrayList<View>() {{
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         weatherConditionList.addAll(initialiseFutureList());
         adapter.notifyDataSetChanged();
         if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
-            for (int i = 1; i <= 5; i++) {
+            for (int i = 1; i <= FIVE_DAYS; i++) {
                 compositeSubscription.add(APIInteractor.getInstance().getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
                     @Override
                     public void onNext(WeatherCondition weatherCondition) {
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     private List<WeatherCondition> initialiseFutureList() {
 
         List<WeatherCondition> emptyWeatherConditionList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < FIVE_DAYS; i++) {
             emptyWeatherConditionList.add(new WeatherCondition(null, new Weather(0.0f, 0, 0), new Wind("", 0), null, new Clouds(0), ""));
         }
         return emptyWeatherConditionList;
