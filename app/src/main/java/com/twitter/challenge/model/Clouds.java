@@ -1,5 +1,8 @@
 package com.twitter.challenge.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by edk763 on 9/16/17.
  */
 
-public class Clouds {
+public class Clouds implements Parcelable{
     @SerializedName("cloudiness")
     @Expose
     private Integer cloudiness;
@@ -35,5 +38,25 @@ public class Clouds {
     public void setCloudiness(Integer cloudiness) {
         this.cloudiness = cloudiness;
     }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(cloudiness);
+    }
+
+    public static final Parcelable.Creator<Clouds> CREATOR = new Creator<Clouds>() {
+        public Clouds createFromParcel(Parcel source) {
+            Clouds clouds = new Clouds();
+            clouds.cloudiness = source.readInt();
+            return clouds;
+        }
+        public Clouds[] newArray(int size) {
+            return new Clouds[size];
+        }
+
+    };
 
 }

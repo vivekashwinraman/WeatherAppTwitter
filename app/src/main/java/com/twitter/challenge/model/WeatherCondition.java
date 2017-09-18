@@ -1,5 +1,8 @@
 package com.twitter.challenge.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by edk763 on 9/16/17.
  */
 
-public class WeatherCondition {
+public class WeatherCondition implements Parcelable {
     @SerializedName("coord")
     @Expose
     private Coord coord;
@@ -31,13 +34,11 @@ public class WeatherCondition {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public WeatherCondition() {
     }
 
     /**
-     *
      * @param clouds
      * @param coord
      * @param wind
@@ -111,4 +112,36 @@ public class WeatherCondition {
         this.day = day;
     }
 
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(name);
+        parcel.writeInt(day);
+        parcel.writeParcelable(clouds, flags);
+        parcel.writeParcelable(rain, flags);
+        parcel.writeParcelable(wind, flags);
+        parcel.writeParcelable(weather, flags);
+        parcel.writeParcelable(coord, flags);
+    }
+
+    public static final Parcelable.Creator<WeatherCondition> CREATOR = new Creator<WeatherCondition>() {
+        public WeatherCondition createFromParcel(Parcel source) {
+            WeatherCondition weatherCondition = new WeatherCondition();
+            weatherCondition.name = source.readString();
+            weatherCondition.day = source.readInt();
+            weatherCondition.clouds = source.readParcelable(getClass().getClassLoader());
+            weatherCondition.rain = source.readParcelable(getClass().getClassLoader());
+            weatherCondition.wind = source.readParcelable(getClass().getClassLoader());
+            weatherCondition.weather = source.readParcelable(getClass().getClassLoader());
+            weatherCondition.coord = source.readParcelable(getClass().getClassLoader());
+            return weatherCondition;
+        }
+
+        public WeatherCondition[] newArray(int size) {
+            return new WeatherCondition[size];
+        }
+
+    };
 }

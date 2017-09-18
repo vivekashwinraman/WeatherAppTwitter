@@ -1,5 +1,8 @@
 package com.twitter.challenge.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by edk763 on 9/16/17.
  */
 
-public class Wind {
+public class Wind implements Parcelable{
     @SerializedName("speed")
     @Expose
     private String speed;
@@ -48,4 +51,27 @@ public class Wind {
     public void setDeg(Integer deg) {
         this.deg = deg;
     }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(speed);
+        parcel.writeInt(deg);
+    }
+
+    public static final Parcelable.Creator<Wind> CREATOR = new Creator<Wind>() {
+        public Wind createFromParcel(Parcel source) {
+            Wind wind = new Wind();
+            wind.speed = source.readString();
+            wind.deg = source.readInt();
+            return wind;
+        }
+        public Wind[] newArray(int size) {
+            return new Wind[size];
+        }
+
+    };
+
 }

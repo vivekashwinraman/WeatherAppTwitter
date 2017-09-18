@@ -40,11 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView cloudView;
     private TextView titleView;
     private View dividerView;
-    private APIInteractor apiInteractor;
     private List<View> list;
-
-
-    private final ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
+    private ArrayList<WeatherCondition> weatherConditionList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         dividerView = findViewById(R.id.divider);
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
-        apiInteractor = APIInteractor.getInstance();
         adapter = new WeatherAdapter(weatherConditionList);
         horizontalLayoutManager
                 = new GridLayoutManager(MainActivity.this, 5);
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeGetCurrentCall() {
-        compositeSubscription.add(apiInteractor.getCurrent().subscribe(new Subscriber<WeatherCondition>() {
+        compositeSubscription.add(APIInteractor.getInstance().getCurrent().subscribe(new Subscriber<WeatherCondition>() {
             @Override
             public void onNext(WeatherCondition weatherCondition) {
                 Toast.makeText(getApplicationContext(), weatherCondition.getName(), Toast.LENGTH_LONG).show();
@@ -156,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         for (int i = 1; i <= 5; i++) {
-            compositeSubscription.add(apiInteractor.getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
+            compositeSubscription.add(APIInteractor.getInstance().getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
                 @Override
                 public void onNext(WeatherCondition weatherCondition) {
                     Log.v("test", "day number : " + weatherCondition.getDay());
