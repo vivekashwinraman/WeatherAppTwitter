@@ -45,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private View dividerView;
     private List<View> list;
     private ArrayList<WeatherCondition> weatherConditionList;
+    private String standardDeviation;
     private boolean forecastShown = false;
     private static final String WEATHER_LIST_TAG = "weather_list";
     private static final String FORECAST_SHOWN_TAG = "forecast_shown";
+    private static final String STD_DEVIATION = "std_deviation";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +94,11 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             this.weatherConditionList = new ArrayList<>();
             this.forecastShown = false;
+            this.standardDeviation = new String();
         } else {
             this.weatherConditionList = savedInstanceState.getParcelableArrayList(WEATHER_LIST_TAG);
             this.forecastShown = savedInstanceState.getBoolean(FORECAST_SHOWN_TAG);
+            this.standardDeviation = savedInstanceState.getString(STD_DEVIATION);
         }
         showHideList(forecastShown);
         adapter = new WeatherAdapter(weatherConditionList);
@@ -115,7 +119,13 @@ public class MainActivity extends AppCompatActivity {
             view.setVisibility(showHide ? View.VISIBLE : View.GONE);
         }
         forecastShown = showHide;
-        button.setText(forecastShown? R.string.hide_future:  R.string.show_future);
+        button.setText(forecastShown ? R.string.hide_future : R.string.show_future);
+        if (showHide) {
+            tempStandardDevView.setVisibility(View.VISIBLE);
+            tempStandardDevView.setText(standardDeviation);
+        } else {
+            tempStandardDevView.setVisibility(View.GONE);
+        }
     }
 
 
@@ -123,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle bundle) {
         bundle.putParcelableArrayList(WEATHER_LIST_TAG, weatherConditionList);
         bundle.putBoolean(FORECAST_SHOWN_TAG, forecastShown);
+        bundle.putString(STD_DEVIATION, standardDeviation);
         super.onSaveInstanceState(bundle);
     }
 
@@ -200,9 +211,8 @@ public class MainActivity extends AppCompatActivity {
                             stdDevs.add(weatherCondition.getWeather().getTemp());
                         }
 
-                        String stdDevString = String.format(getResources().getString(R.string.std_dev), StandardDevCalculator.calculate(stdDevs));
-                        tempStandardDevView.setText(stdDevString);
-                        tempStandardDevView.setVisibility(View.VISIBLE);
+                        standardDeviation = String.format(getResources().getString(R.string.std_dev), StandardDevCalculator.calculate(stdDevs));
+                        tempStandardDevView.setText(standardDeviation);
                     }
 
                     @Override
