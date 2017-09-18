@@ -10,10 +10,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by vraman on 9/17/17.
- */
-
 public class APIInteractor {
     private volatile static APIInteractor instance = null;
     private WeatherInterface weatherInterface;

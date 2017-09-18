@@ -6,10 +6,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-/**
- * Created by edk763 on 9/16/17.
- */
-
 public interface WeatherInterface {
     @GET("/current.json")
     Call<WeatherCondition> getCurrent();

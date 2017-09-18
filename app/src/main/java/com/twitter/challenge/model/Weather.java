@@ -6,10 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by edk763 on 9/16/17.
- */
-
 public class Weather implements Parcelable {
     @SerializedName("temp")
     @Expose
