@@ -8,4 +8,6 @@
     <string name="show_future">Show Future</string>
     <string name="five_day">Five Day Weather</string>
     <string name="std_dev">Standard Deviation %1$f</string>
+    <string name="san_fran">San Francisco</string>
+    <string name="blank"> --- </string>
 </resources>
