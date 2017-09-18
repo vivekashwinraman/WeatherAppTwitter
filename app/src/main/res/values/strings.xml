@@ -2,8 +2,12 @@
     <string name="app_name">Tweather</string>
     <string name="current_temperature">Current temperature</string>
     <string name="temperature">%1$s °C / %2$s °F</string>
+    <string name="temperature_f">%1$s °F</string>
     <string name="wind">Wind Speed %1$s</string>
     <string name="hide_future">Hide Future</string>
     <string name="show_future">Show Future</string>
     <string name="five_day">Five Day Weather</string>
+    <string name="std_dev">Standard Deviation %1$f</string>
+    <string name="san_fran">San Francisco</string>
+    <string name="blank"> --- </string>
 </resources>

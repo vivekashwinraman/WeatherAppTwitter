@@ -15,7 +15,7 @@
         android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/text_very_small"
         android:layout_below="@id/weatherIcon"
@@ -25,8 +25,9 @@
         android:id="@+id/wind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/temperature"
         android:textSize="@dimen/text_very_small"/>
+
 </RelativeLayout>

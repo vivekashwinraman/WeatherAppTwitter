@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.twitter.challenge.R;
 import com.twitter.challenge.model.WeatherCondition;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -22,17 +23,15 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     private List<WeatherCondition> fiveDayWeatherList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView temperature;
+        public TextView temperatureView;
         public TextView windView;
         public ImageView cloudView;
-
 
         public ViewHolder(View view) {
             super(view);
             cloudView = (ImageView) view.findViewById(R.id.weatherIcon);
-            temperature = (TextView) view.findViewById(R.id.temperature);
+            temperatureView = (TextView) view.findViewById(R.id.temperature);
             windView = (TextView) view.findViewById(R.id.wind);
-
         }
     }
 
@@ -55,7 +54,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         } else {
             holder.cloudView.setImageResource(R.mipmap.sun);
         }
-        holder.temperature.setText(String.valueOf(fiveDayWeatherList.get(position).getWeather().getTemp()));
+        DecimalFormat df = new DecimalFormat("##.#");
+        String temperatureString =  String.format(holder.itemView.getResources().getString(R.string.temperature_f),
+                df.format(fiveDayWeatherList.get(position).getWeather().getTemp()));
+
+        holder.temperatureView.setText(temperatureString);
         holder.windView.setText(fiveDayWeatherList.get(position).getWind().getSpeed());
     }
 

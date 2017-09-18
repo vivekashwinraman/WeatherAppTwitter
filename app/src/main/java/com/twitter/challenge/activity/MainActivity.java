@@ -18,6 +18,8 @@ import com.twitter.challenge.model.Weather;
 import com.twitter.challenge.model.WeatherCondition;
 import com.twitter.challenge.model.Wind;
 import com.twitter.challenge.network.APIInteractor;
+import com.twitter.challenge.utils.NetworkUtils;
+import com.twitter.challenge.utils.StandardDevCalculator;
 import com.twitter.challenge.utils.TemperatureConverter;
 
 import java.text.DecimalFormat;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView locationView;
     private TextView temperatureView;
     private TextView windSpeedView;
+    private TextView tempStandardDevView;
     private Button button;
     private ImageView cloudView;
     private TextView titleView;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         temperatureView = (TextView) findViewById(R.id.temperature);
         cloudView = (ImageView) findViewById(R.id.cloud);
         titleView = (TextView) findViewById(R.id.list_title);
+        tempStandardDevView = (TextView) findViewById(R.id.sd);
         dividerView = findViewById(R.id.divider);
 
         recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             add(recyclerView);
             add(titleView);
             add(dividerView);
+            add(tempStandardDevView);
         }};
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +92,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         compositeSubscription = new CompositeSubscription();
-        makeGetCurrentCall();
+        if(NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+            cloudView.setImageResource(0);
+            makeGetCurrentCall();
+        } else {
+            cloudView.setImageResource(R.mipmap.error_cloud);
+        }
     }
 
     private void showHideList(boolean showHide) {
@@ -151,27 +161,38 @@ public class MainActivity extends AppCompatActivity {
         weatherConditionList.addAll(initialiseFutureList());
         adapter.notifyDataSetChanged();
 
-        for (int i = 1; i <= 5; i++) {
-            compositeSubscription.add(APIInteractor.getInstance().getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
-                @Override
-                public void onNext(WeatherCondition weatherCondition) {
-                    Log.v("test", "day number : " + weatherCondition.getDay());
-                    weatherConditionList.set(weatherCondition.getDay()-1, weatherCondition);
-                }
 
-                @Override
-                public void onCompleted() {
-                    adapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        Log.d("RetrofitTest", "Error code: " + response.code());
+        if(NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+            for (int i = 1; i <= 5; i++) {
+                compositeSubscription.add(APIInteractor.getInstance().getFuture(i).subscribe(new Subscriber<WeatherCondition>() {
+                    @Override
+                    public void onNext(WeatherCondition weatherCondition) {
+                        Log.v("test", "day number : " + weatherCondition.getDay());
+                        weatherConditionList.set(weatherCondition.getDay() - 1, weatherCondition);
                     }
-                }
-            }));
+
+                    @Override
+                    public void onCompleted() {
+                        adapter.notifyDataSetChanged();
+                        List<Float> stdDevs = new ArrayList<>();
+                        for (WeatherCondition weatherCondition : weatherConditionList) {
+                            stdDevs.add(weatherCondition.getWeather().getTemp());
+                        }
+
+                        String stdDevString = String.format(getResources().getString(R.string.std_dev), StandardDevCalculator.calculate(stdDevs));
+                        tempStandardDevView.setText(stdDevString);
+                        tempStandardDevView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            Log.d("RetrofitTest", "Error code: " + response.code());
+                        }
+                    }
+                }));
+            }
         }
 
     }

@@ -10,79 +10,90 @@
     android:background="@drawable/gradient"
     android:padding="20dp">
 
-<LinearLayout
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="@dimen/text_small"
-        android:textStyle="bold"
-        android:layout_margin="@dimen/margin_small"
-        android:padding="@dimen/padding_small"
-        android:textColor="@color/white"/>
-
-    <ImageView
-        android:id="@+id/cloud"
-        android:layout_width="@dimen/image_size"
-        android:layout_height="@dimen/image_size"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
-        android:id="@+id/temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/margin_medium"
-        android:textSize="@dimen/text_extra_large"
-        android:padding="@dimen/padding_medium"
-        android:textColor="@color/white"/>
-
-    <TextView
-        android:id="@+id/wind_speed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="@dimen/text_small"
-        android:layout_margin="@dimen/margin_small"
-        android:padding="@dimen/padding_small"
-        android:textColor="@color/white"/>
-
-    <Button
-        android:id="@+id/future_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin_medium"
-        android:text="@string/show_future"/>
-
-    <TextView
-        android:id="@+id/list_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_small"
-        android:text="@string/five_day"
-        android:textColor="@color/white"
-        android:visibility="gone"/>
-
-    <View
-        android:id="@+id/divider"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/horizontal_recycler_view"
-        android:layout_margin="@dimen/margin_medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_small"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/margin_small"
+            android:padding="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:text="@string/san_fran"/>
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/cloud"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/margin_medium"
+            android:textSize="@dimen/text_extra_large"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@color/white"
+            android:text="@string/blank"/>
+
+        <TextView
+            android:id="@+id/wind_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_small"
+            android:layout_margin="@dimen/margin_small"
+            android:padding="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:text="@string/blank"/>
+
+        <Button
+            android:id="@+id/future_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_medium"
+            android:text="@string/show_future"/>
+
+        <TextView
+            android:id="@+id/list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:text="@string/five_day"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/horizontal_recycler_view"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/sd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_medium"
+            android:textSize="@dimen/text_small"/>
+
+    </LinearLayout>
 </ScrollView>
