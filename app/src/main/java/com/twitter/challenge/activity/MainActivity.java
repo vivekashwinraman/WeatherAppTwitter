@@ -115,11 +115,7 @@ public class MainActivity extends AppCompatActivity {
             view.setVisibility(showHide ? View.VISIBLE : View.GONE);
         }
         forecastShown = showHide;
-        if (forecastShown) {
-            button.setText(R.string.hide_future);
-        } else {
-            button.setText(R.string.show_future);
-        }
+        button.setText(forecastShown? R.string.hide_future:  R.string.show_future);
     }
 
 

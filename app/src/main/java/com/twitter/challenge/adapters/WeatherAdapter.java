@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.twitter.challenge.R;
 import com.twitter.challenge.model.WeatherCondition;
+import com.twitter.challenge.utils.TemperatureConverter;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -55,8 +56,10 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             holder.cloudView.setImageResource(R.mipmap.sun);
         }
         DecimalFormat df = new DecimalFormat("##.#");
-        String temperatureString =  String.format(holder.itemView.getResources().getString(R.string.temperature_f),
-                df.format(fiveDayWeatherList.get(position).getWeather().getTemp()));
+
+        String temperatureString =  String.format(holder.itemView.getResources().getString(R.string.temperature_c),
+                df.format(fiveDayWeatherList.get(position).getWeather().getTemp()),
+                df.format(TemperatureConverter.celsiusToFahrenheit(fiveDayWeatherList.get(position).getWeather().getTemp())));
 
         holder.temperatureView.setText(temperatureString);
         holder.windView.setText(fiveDayWeatherList.get(position).getWind().getSpeed());

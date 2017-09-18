@@ -18,8 +18,7 @@
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/text_very_small"
-        android:layout_below="@id/weatherIcon"
-        android:text="@string/temperature"/>
+        android:layout_below="@id/weatherIcon"/>
 
     <TextView
         android:id="@+id/wind"
